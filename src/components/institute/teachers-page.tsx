@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, ArrowRight, GraduationCap, Users, Loader2, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,10 +20,6 @@ import {
 import type { TeacherWithCount } from '@/lib/api';
 
 // ==================== INTERFACES ====================
-
-interface TeachersPageProps {
-  onBack: () => void;
-}
 
 interface TeacherFormData {
   name: string;
@@ -73,7 +70,8 @@ const emptyForm: TeacherFormData = {
 
 // ==================== COMPONENT ====================
 
-export default function TeachersPage({ onBack }: TeachersPageProps) {
+export default function TeachersPage() {
+  const router = useRouter();
   // ===== Teachers List State =====
   const [teachers, setTeachers] = useState<TeacherWithCount[]>([]);
   const [loading, setLoading] = useState(true);
@@ -477,7 +475,7 @@ export default function TeachersPage({ onBack }: TeachersPageProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button
-          onClick={onBack}
+          onClick={() => router.push('/')}
           className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold px-6"
         >
           <ArrowRight className="h-4 w-4 ml-2" />

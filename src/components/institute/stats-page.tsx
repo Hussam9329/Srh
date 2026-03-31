@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Users, UserCheck, UserX, GraduationCap, BookOpen, DollarSign,
   TrendingDown, CreditCard, ArrowRight, Loader2, FileText,
@@ -20,10 +21,6 @@ import {
 
 // ==================== INTERFACES ====================
 
-interface StatsPageProps {
-  onBack: () => void;
-}
-
 interface ReportData {
   stats: DashboardStats;
   students: any[];
@@ -33,7 +30,8 @@ interface ReportData {
 
 // ==================== COMPONENT ====================
 
-export default function StatsPage({ onBack }: StatsPageProps) {
+export default function StatsPage() {
+  const router = useRouter();
   // ===== Data State =====
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -391,7 +389,7 @@ export default function StatsPage({ onBack }: StatsPageProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button
-          onClick={onBack}
+          onClick={() => router.push('/')}
           className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold px-6"
         >
           <ArrowRight className="h-4 w-4 ml-2" />

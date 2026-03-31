@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, Search, Wallet, TrendingDown, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,10 +22,6 @@ import {
 
 // ==================== INTERFACES ====================
 
-interface AccountingPageProps {
-  onBack: () => void;
-}
-
 interface TeacherBalanceRow extends TeacherBalance {
   id: number;
   name: string;
@@ -41,7 +38,8 @@ interface WithdrawalRecord {
 
 // ==================== COMPONENT ====================
 
-export default function AccountingPage({ onBack }: AccountingPageProps) {
+export default function AccountingPage() {
+  const router = useRouter();
   // ===== Data State =====
   const [allBalances, setAllBalances] = useState<TeacherBalanceRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -171,7 +169,7 @@ export default function AccountingPage({ onBack }: AccountingPageProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button
-          onClick={onBack}
+          onClick={() => router.push('/')}
           className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold px-6"
         >
           <ArrowRight className="h-4 w-4 ml-2" />

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Users,
   UserCheck,
@@ -15,10 +16,6 @@ import {
   Shield,
 } from 'lucide-react';
 import { fetchStats, formatCurrency, type DashboardStats } from '@/lib/api';
-
-interface DashboardProps {
-  onNavigate: (page: string) => void;
-}
 
 interface StatCard {
   label: string;
@@ -84,7 +81,16 @@ function formatStatValue(value: number | undefined, format?: 'number' | 'currenc
   return value.toLocaleString('ar-IQ');
 }
 
-export default function Dashboard({ onNavigate }: DashboardProps) {
+const pageRoutes: Record<string, string> = {
+  students: '/students',
+  teachers: '/teachers',
+  accounting: '/accounting',
+  stats: '/stats',
+  users: '/users',
+};
+
+export default function Dashboard() {
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -175,7 +181,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           {navCards.map((card) => (
             <div
               key={card.page}
-              onClick={() => onNavigate(card.page)}
+              onClick={() => router.push(pageRoutes[card.page])}
               className="group w-full max-w-[280px] min-h-[300px] bg-[#222] border-2 border-[#D4AF37] rounded-[20px] flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#FFE38A] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] transition-all duration-300 px-6"
             >
               <div className="text-[#D4AF37] transition-transform duration-300 group-hover:scale-110">

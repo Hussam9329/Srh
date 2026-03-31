@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-
-function encodePassword(password: string): string {
-  return Buffer.from(password).toString('base64')
-}
+import { hashPassword } from '@/lib/password'
 
 // GET /api/users/[id] - Get single user
 export async function GET(
@@ -66,7 +63,9 @@ export async function PUT(
     if (username !== undefined) updateData.username = username.trim()
     if (role !== undefined) updateData.role = role
     if (isActive !== undefined) updateData.isActive = isActive
-    if (password && password.length >= 4) updateData.password = encodePassword(password)
+    if (password && password.length >= 4) {
+      updateData.password = await hashPassword(password)
+    }
 
     const user = await db.user.update({
       where: { id: userId },

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Search, Plus, Edit, Trash2, Eye, ArrowRight, Unlink, CreditCard,
   FileText, Check, Loader2, Printer, X, ChevronLeft
@@ -30,10 +31,6 @@ import {
   type Student
 } from '@/lib/api';
 import type { StudentWithExtras, Teacher } from '@/lib/api';
-
-interface StudentsPageProps {
-  onBack: () => void;
-}
 
 interface TeacherPaymentInfo {
   teacherId: number;
@@ -81,7 +78,8 @@ const emptyPaymentForm: PaymentFormData = {
   notes: '',
 };
 
-export default function StudentsPage({ onBack }: StudentsPageProps) {
+export default function StudentsPage() {
+  const router = useRouter();
   // ===== Students List State =====
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
@@ -690,7 +688,7 @@ export default function StudentsPage({ onBack }: StudentsPageProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button
-          onClick={onBack}
+          onClick={() => router.push('/')}
           className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold px-6"
         >
           <ArrowRight className="h-4 w-4 ml-2" />

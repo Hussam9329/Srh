@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   UserPlus, Edit, Trash2, Shield, LogIn, LogOut,
   ArrowRight, Loader2, Users, Eye, EyeOff, Check, X, KeyRound
@@ -49,7 +50,8 @@ const ROLE_MAP: Record<string, { label: string; color: string }> = {
   viewer: { label: 'مشاهد', color: 'bg-gray-500/20 text-gray-400 border-gray-500/50' },
 };
 
-export default function UsersPage({ onBack }: { onBack: () => void }) {
+export default function UsersPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -353,7 +355,7 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-6 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <Button onClick={onBack}
+          <Button onClick={() => router.push('/')}
             className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold px-6">
             <ArrowRight className="h-4 w-4 ml-2" />
             العودة للوحة التحكم

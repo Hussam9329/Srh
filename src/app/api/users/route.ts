@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-
-// Simple offline password encoding (not secure for production, but fine for offline local app)
-function encodePassword(password: string): string {
-  return Buffer.from(password).toString('base64')
-}
-
-function decodePassword(encoded: string): string {
-  return Buffer.from(encoded, 'base64').toString('utf-8')
-}
+import { hashPassword } from '@/lib/password'
 
 // GET /api/users - List all users
 export async function GET() {
@@ -46,10 +38,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'اسم المستخدم موجود بالفعل' }, { status: 409 })
     }
 
+    const hashedPassword = await hashPassword(password);
+
     const user = await db.user.create({
       data: {
         username: username.trim(),
-        password: encodePassword(password),
+        password: hashedPassword,
         fullName: fullName.trim(),
         role: role || 'user',
         isActive: isActive !== false,

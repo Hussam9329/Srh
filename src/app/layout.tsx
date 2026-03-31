@@ -16,6 +16,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "نظام إدارة معهد صرح البنوك",
   description: "نظام إدارة شامل للطلاب والمدرسين والحسابات - معهد صرح البنوك",
+  keywords: ["إدارة معهد", "صرح البنوك", "نظام إدارة", "طلاب", "مدرسين", "حسابات"],
+  authors: [{ name: "Hussam9329" }],
 };
 
 export default function RootLayout({
