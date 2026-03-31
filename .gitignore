@@ -4,3 +4,11 @@ node_modules/
 *.log
 .env
 .zscripts/
+skills/
+examples/
+mini-services/
+download/
+upload/
+Caddyfile
+worklog.md
+dev.log
