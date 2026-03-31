@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id            Int      @id @default(autoincrement())
+  name          String
+  studyType     String   @default("حضوري") // حضوري or الكتروني
+  hasCard       Boolean  @default(false)
+  hasBadge      Boolean  @default(false)
+  status        String   @default("مستمر") // مستمر or منسحب
+  barcode       String   @unique
+  notes         String?
+  createdAt     DateTime @default(now())
+  
+  // Relations
+  teachers      StudentTeacher[]
+  installments  Installment[]
+
+  @@map("students")
+}
+
+model Teacher {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  subject             String
+  totalFee            Float    @default(0)
+  institutePercentage Int      @default(30)
+  notes               String?
+  createdAt           DateTime @default(now())
+  
+  // Relations
+  students            StudentTeacher[]
+  installments        Installment[]
+  withdrawals         TeacherWithdrawal[]
+
+  @@map("teachers")
+}
+
+model StudentTeacher {
+  studentId Int
+  teacherId Int
+  
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  
+  @@id([studentId, teacherId])
+  @@map("student_teacher")
+}
+
+model Installment {
+  id               Int      @id @default(autoincrement())
+  studentId        Int
+  teacherId        Int
+  amount           Float
+  paymentDate      DateTime @default(now())
+  notes            String?
+  installmentType  String   @default("القسط الأول")
+  
+  student          Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher          Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  
+  @@map("installments")
+}
+
+model TeacherWithdrawal {
+  id             Int      @id @default(autoincrement())
+  teacherId      Int
+  amount         Float
+  withdrawalDate DateTime @default(now())
+  notes          String?
+  
+  teacher        Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  
+  @@map("teacher_withdrawals")
+}
