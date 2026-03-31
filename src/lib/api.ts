@@ -204,6 +204,11 @@ export interface TeacherBalance {
   teacher_share: number;
   total_withdrawn: number;
   remaining: number;
+  teacherName?: string;
+  subject?: string;
+  institute_percentage?: number;
+  deductionByType?: Record<string, number>;
+  paymentsByType?: Record<string, number>;
 }
 
 export async function fetchTeacherBalance(teacherId: number): Promise<TeacherBalance> {
@@ -267,4 +272,56 @@ export function formatDate(dateStr: string): string {
   } catch {
     return dateStr;
   }
+}
+
+// ============ USERS ============
+
+export async function fetchUsers(): Promise<any[]> {
+  const res = await fetch(`${BASE}/api/users`);
+  if (!res.ok) throw new Error('Failed to fetch users');
+  return res.json();
+}
+
+export async function createUser(data: { username: string; password: string; fullName: string; role?: string; isActive?: boolean }): Promise<any> {
+  const res = await fetch(`${BASE}/api/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create user' }));
+    throw new Error(err.error || 'Failed to create user');
+  }
+  return res.json();
+}
+
+export async function updateUser(id: number, data: any): Promise<any> {
+  const res = await fetch(`${BASE}/api/users/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to update user' }));
+    throw new Error(err.error || 'Failed to update user');
+  }
+  return res.json();
+}
+
+export async function deleteUser(id: number): Promise<void> {
+  const res = await fetch(`${BASE}/api/users/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Failed to delete user');
+}
+
+export async function loginUser(username: string, password: string): Promise<any> {
+  const res = await fetch(`${BASE}/api/users/auth`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Login failed' }));
+    throw new Error(err.error || 'Login failed');
+  }
+  return res.json();
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
 // GET /api/reports/teacher/[id] - Complete teacher report
+// Uses percentage-based deduction per installment type
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -47,7 +48,7 @@ export async function GET(
         // Group payments by type
         const paymentsByType: Record<string, number> = {}
         installments.forEach((inst) => {
-          const key = inst.installmentType
+          const key = inst.installmentType || 'القسط الأول'
           paymentsByType[key] = (paymentsByType[key] || 0) + inst.amount
         })
 
@@ -71,9 +72,29 @@ export async function GET(
     const totalStudents = studentsData.length
     const payingStudentsCount = studentsData.filter((s) => s.hasPaid).length
 
-    // Institute deduction: 50,000 per paying student
-    const INSTITUTE_DEDUCTION_PER_STUDENT = 50000
-    const instituteDeduction = payingStudentsCount * INSTITUTE_DEDUCTION_PER_STUDENT
+    // Institute deduction: percentage-based per installment type
+    // Example: 30% total → 15% from course 1 payments + 15% from course 2 payments
+    // If student pays in installments, percentage is taken from sum of all payments per course
+    const institutePercentage = teacher.institutePercentage || 30
+    const halfPercent = institutePercentage / 2
+
+    // Aggregate payments by installment type across all students
+    const allPaymentsByType: Record<string, number> = {}
+    const deductionByType: Record<string, number> = {}
+    let instituteDeduction = 0
+
+    studentsData.forEach((s) => {
+      Object.entries(s.paymentsByType).forEach(([type, amount]) => {
+        allPaymentsByType[type] = (allPaymentsByType[type] || 0) + amount
+      })
+    })
+
+    for (const [type, sum] of Object.entries(allPaymentsByType)) {
+      const deduction = sum * (halfPercent / 100)
+      deductionByType[type] = deduction
+      instituteDeduction += deduction
+    }
+
     const teacherShare = totalPaid - instituteDeduction
 
     // Get withdrawals
@@ -85,21 +106,15 @@ export async function GET(
     const totalWithdrawn = withdrawals.reduce((sum, w) => sum + w.amount, 0)
     const netBalance = teacherShare - totalWithdrawn
 
-    // Aggregate payments by installment type across all students
-    const allPaymentsByType: Record<string, number> = {}
-    studentsData.forEach((s) => {
-      Object.entries(s.paymentsByType).forEach(([type, amount]) => {
-        allPaymentsByType[type] = (allPaymentsByType[type] || 0) + amount
-      })
-    })
-
     return NextResponse.json({
       teacher: {
         ...teacher,
         totalPaid,
         totalStudents,
         payingStudentsCount,
+        institutePercentage,
         instituteDeduction,
+        deductionByType,
         teacherShare,
         totalWithdrawn,
         netBalance,
@@ -107,6 +122,7 @@ export async function GET(
       students: studentsData,
       withdrawals,
       paymentsByType: allPaymentsByType,
+      deductionByType,
     })
   } catch (error) {
     console.error('Error generating teacher report:', error)

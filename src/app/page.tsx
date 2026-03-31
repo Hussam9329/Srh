@@ -6,6 +6,7 @@ import StudentsPage from '@/components/institute/students-page';
 import TeachersPage from '@/components/institute/teachers-page';
 import AccountingPage from '@/components/institute/accounting-page';
 import StatsPage from '@/components/institute/stats-page';
+import UsersPage from '@/components/institute/users-page';
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -34,6 +35,9 @@ export default function Home() {
       )}
       {currentPage === 'stats' && (
         <StatsPage onBack={handleBack} />
+      )}
+      {currentPage === 'users' && (
+        <UsersPage onBack={handleBack} />
       )}
     </main>
   );

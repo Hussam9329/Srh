@@ -291,8 +291,18 @@ export default function AccountingPage({ onBack }: AccountingPageProps) {
                   const teacher = allBalances.find((t) => t.id === selectedTeacherId);
                   return (
                     <div className="bg-[#222] border border-[#D4AF37]/30 rounded-xl p-5">
-                      <h2 className="text-xl font-bold text-[#D4AF37]">{teacher?.name}</h2>
-                      <p className="text-[#FFE38A] text-sm mt-1">{teacher?.subject}</p>
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div>
+                        <h2 className="text-xl font-bold text-[#D4AF37]">{teacher?.name}</h2>
+                        <p className="text-[#FFE38A] text-sm mt-1">{teacher?.subject}</p>
+                      </div>
+                      {selectedBalance && (
+                        <div className="bg-[#1A1A1A] border border-[#D4AF37]/30 rounded-lg px-3 py-1.5">
+                          <span className="text-[#999] text-xs">نسبة المعهد: </span>
+                          <span className="text-[#D4AF37] font-bold">{selectedBalance.institute_percentage || 30}%</span>
+                        </div>
+                      )}
+                    </div>
                     </div>
                   );
                 })()}

@@ -44,9 +44,27 @@ export async function GET(
       where: { teacherId },
     })
 
-    // Institute deduction: 50,000 per paying student
-    const INSTITUTE_DEDUCTION_PER_STUDENT = 50000
-    const instituteDeduction = payingStudentsCount * INSTITUTE_DEDUCTION_PER_STUDENT
+    // Institute deduction: percentage-based per installment type
+    // Example: 30% total → 15% from course 1 payments + 15% from course 2 payments
+    // If student pays in installments, the percentage is taken from the sum of all payments per course
+    const institutePercentage = teacher.institutePercentage || 30
+    const halfPercent = institutePercentage / 2
+
+    // Group payments by installment type
+    const paymentsByType: Record<string, number> = {}
+    installments.forEach((inst) => {
+      const key = inst.installmentType || 'القسط الأول'
+      paymentsByType[key] = (paymentsByType[key] || 0) + inst.amount
+    })
+
+    // Calculate deduction per installment type
+    const deductionByType: Record<string, number> = {}
+    let instituteDeduction = 0
+    for (const [type, sum] of Object.entries(paymentsByType)) {
+      const deduction = sum * (halfPercent / 100)
+      deductionByType[type] = deduction
+      instituteDeduction += deduction
+    }
 
     // Teacher share
     const teacherShare = totalPaid - instituteDeduction
@@ -63,10 +81,14 @@ export async function GET(
     return NextResponse.json({
       teacherId,
       teacherName: teacher.name,
+      subject: teacher.subject,
+      institutePercentage,
       totalPaid,
       payingStudentsCount,
       totalStudents,
       instituteDeduction,
+      deductionByType,
+      paymentsByType,
       teacherShare,
       totalWithdrawn,
       remaining,

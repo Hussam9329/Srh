@@ -12,6 +12,7 @@ import {
   Monitor,
   Calculator,
   BarChart3,
+  Shield,
   Loader2,
 } from 'lucide-react';
 import { fetchStats, formatCurrency, type DashboardStats } from '@/lib/api';
@@ -69,6 +70,12 @@ const navCards: NavCard[] = [
     description: 'تقارير وإحصائيات دقيقة لنتائج وأداء المعهد',
     icon: <BarChart3 className="text-5xl" />,
     page: 'stats',
+  },
+  {
+    title: 'إدارة المستخدمين',
+    description: 'إدارة حسابات المستخدمين والصلاحيات والمستويات',
+    icon: <Shield className="text-5xl" />,
+    page: 'users',
   },
 ];
 

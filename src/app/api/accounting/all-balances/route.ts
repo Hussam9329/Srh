@@ -2,13 +2,12 @@ import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
 // GET /api/accounting/all-balances - Return balance for ALL teachers
+// Uses percentage-based deduction per installment type (as discussed)
 export async function GET() {
   try {
     const teachers = await db.teacher.findMany({
       orderBy: { id: 'desc' },
     })
-
-    const INSTITUTE_DEDUCTION_PER_STUDENT = 50000
 
     const balances = await Promise.all(
       teachers.map(async (teacher) => {
@@ -32,7 +31,24 @@ export async function GET() {
           where: { teacherId: teacher.id },
         })
 
-        const instituteDeduction = payingStudentsCount * INSTITUTE_DEDUCTION_PER_STUDENT
+        // Institute deduction: percentage-based per installment type
+        // Example: 30% total → 15% from course 1 payments + 15% from course 2 payments
+        const institutePercentage = teacher.institutePercentage || 30
+        const halfPercent = institutePercentage / 2
+
+        // Group payments by installment type
+        const paymentsByType: Record<string, number> = {}
+        installments.forEach((inst) => {
+          const key = inst.installmentType || 'القسط الأول'
+          paymentsByType[key] = (paymentsByType[key] || 0) + inst.amount
+        })
+
+        // Calculate deduction per installment type
+        let instituteDeduction = 0
+        for (const [, sum] of Object.entries(paymentsByType)) {
+          instituteDeduction += sum * (halfPercent / 100)
+        }
+
         const teacherShare = totalPaid - instituteDeduction
 
         // Total withdrawn
@@ -47,6 +63,7 @@ export async function GET() {
           teacherId: teacher.id,
           teacherName: teacher.name,
           subject: teacher.subject,
+          institutePercentage,
           totalPaid,
           payingStudentsCount,
           totalStudents,
