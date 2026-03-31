@@ -289,7 +289,7 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
   const isAdmin = loggedInUser?.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] p-4 md:p-8" dir="rtl">
+    <div className="min-h-screen bg-[#1A1A1A] p-4 md:p-8">
       {/* Login Bar */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-[#222] border border-[#D4AF37]/30 rounded-xl p-4">
@@ -320,7 +320,7 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
                 placeholder="اسم المستخدم"
                 value={loginUsername}
                 onChange={(e) => setLoginUsername(e.target.value)}
-                className="bg-[#1A1A1A] border-[#444] text-white w-40"
+                className="bg-[#1A1A1A] border-gray-600 text-white w-40"
                 onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               />
               <div className="relative">
@@ -329,7 +329,7 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
                   placeholder="كلمة المرور"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  className="bg-[#1A1A1A] border-[#444] text-white w-40"
+                  className="bg-[#1A1A1A] border-gray-600 text-white w-40"
                   onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                 />
                 <button
@@ -341,7 +341,7 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
                 </button>
               </div>
               <Button onClick={handleLogin} disabled={loggingIn}
-                className="bg-[#D4AF37] text-[#1A1A1A] hover:bg-[#FFE38A]">
+                className="bg-[#D4AF37] hover:bg-[#c9a030] text-[#1A1A1A] font-bold">
                 {loggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : 'تسجيل الدخول'}
               </Button>
               <span className="text-[#999] text-sm mr-auto">قم بتسجيل الدخول للوصول الكامل</span>
@@ -353,17 +353,17 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-6 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={onBack}
-            className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10">
-            <ArrowRight className="w-4 h-4 ml-1" />
-            العودة
+          <Button onClick={onBack}
+            className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold px-6">
+            <ArrowRight className="h-4 w-4 ml-2" />
+            العودة للوحة التحكم
           </Button>
           <h1 className="text-[#FFE38A] text-2xl font-bold">إدارة المستخدمين</h1>
         </div>
         <div className="flex items-center gap-2">
           {isAdmin && (
             <Button onClick={openAddDialog}
-              className="bg-[#D4AF37] text-[#1A1A1A] hover:bg-[#FFE38A]">
+              className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold">
               <UserPlus className="w-4 h-4 ml-1" />
               إضافة مستخدم
             </Button>
@@ -494,34 +494,34 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="text-[#999]">الاسم الكامل *</Label>
+              <Label className="text-gray-300">الاسم الكامل *</Label>
               <Input value={formFullName} onChange={(e) => setFormFullName(e.target.value)}
-                className="bg-[#1A1A1A] border-[#444] text-white" placeholder="أدخل الاسم الكامل" />
+                className="bg-[#1A1A1A] border-gray-600 text-white" placeholder="أدخل الاسم الكامل" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[#999]">اسم المستخدم *</Label>
+              <Label className="text-gray-300">اسم المستخدم *</Label>
               <Input value={formUsername} onChange={(e) => setFormUsername(e.target.value)}
-                className="bg-[#1A1A1A] border-[#444] text-white font-mono" placeholder="مثال: teacher1" dir="ltr" />
+                className="bg-[#1A1A1A] border-gray-600 text-white font-mono" placeholder="مثال: teacher1" dir="ltr" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[#999]">كلمة المرور * (4 أحرف على الأقل)</Label>
+              <Label className="text-gray-300">كلمة المرور * (4 أحرف على الأقل)</Label>
               <div className="relative">
                 <Input type={showPassword ? 'text' : 'password'} value={formPassword}
                   onChange={(e) => setFormPassword(e.target.value)}
-                  className="bg-[#1A1A1A] border-[#444] text-white font-mono" placeholder="أدخل كلمة المرور" dir="ltr" />
+                  className="bg-[#1A1A1A] border-gray-600 text-white font-mono" placeholder="أدخل كلمة المرور" dir="ltr" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 text-[#999] hover:text-white">
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-[#999]">الدور</Label>
+              <Label className="text-gray-300">الدور</Label>
               <Select value={formRole} onValueChange={setFormRole}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#444] text-white">
+                <SelectTrigger className="bg-[#1A1A1A] border-gray-600 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#222] border-[#444]">
+                <SelectContent className="bg-[#222] border-gray-600">
                   <SelectItem value="admin">مدير</SelectItem>
                   <SelectItem value="user">مستخدم</SelectItem>
                   <SelectItem value="viewer">مشاهد</SelectItem>
@@ -530,16 +530,16 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
             </div>
             <div className="flex items-center gap-2">
               <Checkbox checked={formIsActive} onCheckedChange={(v) => setFormIsActive(v === true)} />
-              <Label className="text-[#999]">الحساب مفعل</Label>
+              <Label className="text-gray-300">الحساب مفعل</Label>
             </div>
           </div>
           <DialogFooter className="gap-2">
             <Button onClick={saveUser} disabled={saving}
-              className="bg-[#D4AF37] text-[#1A1A1A] hover:bg-[#FFE38A]">
+              className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'حفظ'}
             </Button>
-            <Button variant="outline" onClick={() => { setShowAddDialog(false); resetForm(); }}
-              className="border-[#555] text-[#999]">
+            <Button variant="ghost" onClick={() => { setShowAddDialog(false); resetForm(); }}
+              className="text-gray-400 hover:text-white">
               إلغاء
             </Button>
           </DialogFooter>
@@ -554,34 +554,34 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="text-[#999]">الاسم الكامل</Label>
+              <Label className="text-gray-300">الاسم الكامل</Label>
               <Input value={formFullName} onChange={(e) => setFormFullName(e.target.value)}
-                className="bg-[#1A1A1A] border-[#444] text-white" />
+                className="bg-[#1A1A1A] border-gray-600 text-white" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[#999]">اسم المستخدم</Label>
+              <Label className="text-gray-300">اسم المستخدم</Label>
               <Input value={formUsername} onChange={(e) => setFormUsername(e.target.value)}
-                className="bg-[#1A1A1A] border-[#444] text-white font-mono" dir="ltr" />
+                className="bg-[#1A1A1A] border-gray-600 text-white font-mono" dir="ltr" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[#999]">كلمة المرور الجديدة (اتركه فارغاً إذا لا تريد التغيير)</Label>
+              <Label className="text-gray-300">كلمة المرور الجديدة (اتركه فارغاً إذا لا تريد التغيير)</Label>
               <div className="relative">
                 <Input type={showPassword ? 'text' : 'password'} value={formPassword}
                   onChange={(e) => setFormPassword(e.target.value)}
-                  className="bg-[#1A1A1A] border-[#444] text-white font-mono" placeholder="••••••" dir="ltr" />
+                  className="bg-[#1A1A1A] border-gray-600 text-white font-mono" placeholder="••••••" dir="ltr" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 text-[#999] hover:text-white">
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-[#999]">الدور</Label>
+              <Label className="text-gray-300">الدور</Label>
               <Select value={formRole} onValueChange={setFormRole}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#444] text-white">
+                <SelectTrigger className="bg-[#1A1A1A] border-gray-600 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#222] border-[#444]">
+                <SelectContent className="bg-[#222] border-gray-600">
                   <SelectItem value="admin">مدير</SelectItem>
                   <SelectItem value="user">مستخدم</SelectItem>
                   <SelectItem value="viewer">مشاهد</SelectItem>
@@ -590,16 +590,16 @@ export default function UsersPage({ onBack }: { onBack: () => void }) {
             </div>
             <div className="flex items-center gap-2">
               <Checkbox checked={formIsActive} onCheckedChange={(v) => setFormIsActive(v === true)} />
-              <Label className="text-[#999]">الحساب مفعل</Label>
+              <Label className="text-gray-300">الحساب مفعل</Label>
             </div>
           </div>
           <DialogFooter className="gap-2">
             <Button onClick={saveUser} disabled={saving}
-              className="bg-[#D4AF37] text-[#1A1A1A] hover:bg-[#FFE38A]">
+              className="bg-[#D4AF37] hover:bg-[#c9a030] text-black font-bold">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'حفظ التعديلات'}
             </Button>
-            <Button variant="outline" onClick={() => { setEditUser(null); resetForm(); }}
-              className="border-[#555] text-[#999]">
+            <Button variant="ghost" onClick={() => { setEditUser(null); resetForm(); }}
+              className="text-gray-400 hover:text-white">
               إلغاء
             </Button>
           </DialogFooter>

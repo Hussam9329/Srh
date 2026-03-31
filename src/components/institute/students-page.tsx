@@ -686,7 +686,7 @@ export default function StudentsPage({ onBack }: StudentsPageProps) {
   // RENDER
   // ==========================================
   return (
-    <div dir="rtl" className="min-h-screen bg-[#1A1A1A] text-white" style={{ fontFamily: "'Segoe UI', Tahoma, Arial, sans-serif" }}>
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button
@@ -696,7 +696,7 @@ export default function StudentsPage({ onBack }: StudentsPageProps) {
           <ArrowRight className="h-4 w-4 ml-2" />
           العودة للوحة التحكم
         </Button>
-        <h1 className="text-xl md:text-2xl font-bold text-[#D4AF37]">إدارة الطلاب</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-[#FFE38A]">إدارة الطلاب</h1>
       </div>
 
       <div className="px-4 md:px-6 pb-8 space-y-6">
@@ -939,7 +939,7 @@ export default function StudentsPage({ onBack }: StudentsPageProps) {
 
       {/* ===== STUDENT PROFILE DIALOG ===== */}
       <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
-        <DialogContent className="bg-[#1A1A1A] border-gray-700 text-white max-w-3xl max-h-[90vh] overflow-hidden">
+        <DialogContent className="bg-[#222] border-gray-700 text-white max-w-3xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle className="text-[#D4AF37] text-xl">بروفايل الطالب</DialogTitle>
           </DialogHeader>

@@ -13,7 +13,6 @@ import {
   Calculator,
   BarChart3,
   Shield,
-  Loader2,
 } from 'lucide-react';
 import { fetchStats, formatCurrency, type DashboardStats } from '@/lib/api';
 
@@ -108,7 +107,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
   }, []);
 
   return (
-    <div dir="rtl" className="min-h-screen bg-[#1A1A1A] text-white">
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Header Section */}
       <header className="flex flex-col items-center justify-center pt-10 pb-8 px-4">
         <p className="text-[#D4AF37] text-3xl font-bold mb-2">
@@ -150,12 +149,13 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {statCards.map((card) => {
+            {statCards.map((card, index) => {
               const value = stats ? (stats[card.key] as number) : 0;
               return (
                 <div
                   key={card.key}
-                  className="bg-[#222] border border-[#D4AF37]/30 rounded-xl p-4 flex flex-col items-center justify-center gap-3 hover:border-[#D4AF37]/60 transition-all duration-300"
+                  className="bg-[#222] border border-[#D4AF37]/30 rounded-xl p-4 flex flex-col items-center justify-center gap-3 hover:border-[#D4AF37]/60 transition-all duration-300 animate-[fadeIn_0.5s_ease-out_forwards]"
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
                   <div className="text-[#D4AF37]">{card.icon}</div>
                   <span className="text-[#999] text-sm text-center">{card.label}</span>
@@ -169,14 +169,6 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
         )}
       </section>
 
-      {/* Loading spinner overlay for initial load */}
-      {loading && (
-        <div className="flex items-center justify-center gap-2 py-4">
-          <Loader2 className="text-[#D4AF37] animate-spin h-6 w-6" />
-          <span className="text-[#999] text-sm">جاري تحميل البيانات...</span>
-        </div>
-      )}
-
       {/* Navigation Cards */}
       <section className="max-w-6xl mx-auto px-4 mb-12">
         <div className="flex flex-wrap justify-center gap-6">
@@ -184,7 +176,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             <div
               key={card.page}
               onClick={() => onNavigate(card.page)}
-              className="w-full max-w-[280px] h-[350px] bg-[#222] border-2 border-[#D4AF37] rounded-[20px] flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#FFE38A] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] transition-all duration-300 px-6"
+              className="group w-full max-w-[280px] min-h-[300px] bg-[#222] border-2 border-[#D4AF37] rounded-[20px] flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#FFE38A] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] transition-all duration-300 px-6"
             >
               <div className="text-[#D4AF37] transition-transform duration-300 group-hover:scale-110">
                 {card.icon}
@@ -201,7 +193,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-8 border-t border-[#222]">
+      <footer className="text-center py-8 border-t border-[#333]">
         <p className="text-[#999] text-sm">
           &copy; 2025-2026 معهد صرح البنوك. جميع الحقوق محفوظة.
         </p>

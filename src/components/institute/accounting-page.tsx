@@ -167,7 +167,7 @@ export default function AccountingPage({ onBack }: AccountingPageProps) {
   // RENDER
   // ==========================================
   return (
-    <div dir="rtl" className="min-h-screen bg-[#1A1A1A] text-white" style={{ fontFamily: "'Segoe UI', Tahoma, Arial, sans-serif" }}>
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button

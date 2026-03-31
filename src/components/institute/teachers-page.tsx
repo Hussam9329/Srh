@@ -473,7 +473,7 @@ export default function TeachersPage({ onBack }: TeachersPageProps) {
   // RENDER
   // ==========================================
   return (
-    <div dir="rtl" className="min-h-screen bg-[#1A1A1A] text-white" style={{ fontFamily: "'Segoe UI', Tahoma, Arial, sans-serif" }}>
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6">
         <Button
@@ -560,7 +560,7 @@ export default function TeachersPage({ onBack }: TeachersPageProps) {
                           <h3 className="font-bold text-white text-sm truncate">{teacher.name}</h3>
                           <p className="text-xs text-gray-400 mt-0.5">{teacher.subject}</p>
                         </div>
-                        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-0.5 opacity-60 hover:opacity-100 transition-opacity">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
