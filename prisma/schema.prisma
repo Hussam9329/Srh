@@ -7,88 +7,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Student {
-  id            Int      @id @default(autoincrement())
-  name          String
-  studyType     String   @default("حضوري") // حضوري or الكتروني
-  hasCard       Boolean  @default(false)
-  hasBadge      Boolean  @default(false)
-  status        String   @default("مستمر") // مستمر or منسحب
-  barcode       String   @unique
-  notes         String?
-  createdAt     DateTime @default(now())
-  
-  // Relations
-  teachers      StudentTeacher[]
-  installments  Installment[]
-
-  @@map("students")
-}
-
 model Teacher {
-  id                  Int      @id @default(autoincrement())
-  name                String
-  subject             String
-  totalFee            Float    @default(0)
-  institutePercentage Int      @default(30)
-  notes               String?
-  createdAt           DateTime @default(now())
-  
-  // Relations
-  students            StudentTeacher[]
-  installments        Installment[]
-  withdrawals         TeacherWithdrawal[]
-
-  @@map("teachers")
+  id         String   @id @default(cuid())
+  name       String
+  subject    String
+  percentage Float
+  balance    Float    @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  students   TeacherStudent[]
+  withdrawals Withdrawal[]
 }
 
-model StudentTeacher {
-  studentId Int
-  teacherId Int
-  
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  
-  @@id([studentId, teacherId])
-  @@map("student_teacher")
-}
-
-model Installment {
-  id               Int      @id @default(autoincrement())
-  studentId        Int
-  teacherId        Int
-  amount           Float
-  paymentDate      DateTime @default(now())
-  notes            String?
-  installmentType  String   @default("القسط الأول")
-  
-  student          Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  teacher          Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  
-  @@map("installments")
-}
-
-model TeacherWithdrawal {
-  id             Int      @id @default(autoincrement())
-  teacherId      Int
-  amount         Float
-  withdrawalDate DateTime @default(now())
-  notes          String?
-  
-  teacher        Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  
-  @@map("teacher_withdrawals")
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String
-  fullName  String
-  role      String   @default("user") // admin, user, viewer
-  isActive  Boolean  @default(true)
+model Student {
+  id        String   @id @default(cuid())
+  name      String
+  studyType String   @default("حضوري")
+  qrCode    String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  teachers  TeacherStudent[]
+  payments  Payment[]
+}
 
-  @@map("users")
+model TeacherStudent {
+  id        String   @id @default(cuid())
+  teacherId String
+  studentId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([teacherId, studentId])
+}
+
+model Payment {
+  id                  String   @id @default(cuid())
+  studentId           String
+  student             Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  amount              Float
+  instituteAmount     Float
+  teacherAmount       Float
+  description         String?
+  createdAt           DateTime @default(now())
+  teacherDistributions String   @default("[]")
+}
+
+model Withdrawal {
+  id        String   @id @default(cuid())
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  amount    Float
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model InstituteBalance {
+  id             String   @id @default(cuid())
+  totalIncome    Float    @default(0)
+  totalWithdrawn Float    @default(0)
+  updatedAt      DateTime @updatedAt
 }
